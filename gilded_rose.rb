@@ -28,14 +28,12 @@ class Backstage
       return
     end
 
+    item.quality += 1 if item.quality < 50
+
     if item.sell_in <= 5
       item.quality += 1 if item.quality < 50
       item.quality += 1 if item.quality < 50
-      item.quality += 1 if item.quality < 50
     elsif item.sell_in <= 10
-      item.quality += 1 if item.quality < 50
-      item.quality += 1 if item.quality < 50
-    else
       item.quality += 1 if item.quality < 50
     end
 
@@ -45,17 +43,20 @@ end
 
 def update_quality(items)
   items.each do |item|
-    case item.name
-    when "NORMAL ITEM"
-      NormalItem.new.update(item)
-    when "Aged Brie"
-      AgedBrie.new.update(item)
-    when "Sulfuras, Hand of Ragnaros"
-      Sulfuras.new.update(item)
-    when "Backstage passes to a TAFKAL80ETC concert"
-      Backstage.new.update(item)
-    end
+    klass_for(item.name).update(item)
   end
+end
+
+GILDED_ROSE_ITEMS =
+  {
+    "NORMAL ITEM" => NormalItem.new,
+    "Aged Brie" => AgedBrie.new,
+    "Sulfuras, Hand of Ragnaros" => Sulfuras.new,
+    "Backstage passes to a TAFKAL80ETC concert" => Backstage.new
+  }
+
+def klass_for(item_name)
+  GILDED_ROSE_ITEMS[item_name]
 end
 
 # DO NOT CHANGE THINGS BELOW -----------------------------------------
