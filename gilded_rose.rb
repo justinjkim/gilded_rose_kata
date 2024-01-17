@@ -1,36 +1,59 @@
+class NormalItem
+  def update(item)
+    item.sell_in -= 1
+    return if item.quality == 0
+    item.quality -= 1
+    item.quality -= 1 if item.sell_in <= 0
+  end
+end
+
+class AgedBrie
+  def update(item)
+    item.sell_in -= 1
+    item.quality += 1 if item.quality < 50
+    item.quality += 1 if item.sell_in <= 0 && item.quality < 50
+  end
+end
+
+class Sulfuras
+  def update(item)
+  end
+end
+
+class Backstage
+  def update(item)
+    if item.sell_in <= 0
+      item.quality = 0
+      item.sell_in -= 1
+      return
+    end
+
+    if item.sell_in <= 5
+      item.quality += 1 if item.quality < 50
+      item.quality += 1 if item.quality < 50
+      item.quality += 1 if item.quality < 50
+    elsif item.sell_in <= 10
+      item.quality += 1 if item.quality < 50
+      item.quality += 1 if item.quality < 50
+    else
+      item.quality += 1 if item.quality < 50
+    end
+
+    item.sell_in -= 1
+  end
+end
+
 def update_quality(items)
   items.each do |item|
     case item.name
     when "NORMAL ITEM"
-      item.sell_in -= 1
-      return if item.quality == 0
-      item.quality -= 1
-      item.quality -= 1 if item.sell_in <= 0
+      NormalItem.new.update(item)
     when "Aged Brie"
-      item.sell_in -= 1
-      item.quality += 1 if item.quality < 50
-      item.quality += 1 if item.sell_in <= 0 && item.quality < 50
+      AgedBrie.new.update(item)
     when "Sulfuras, Hand of Ragnaros"
-      return
+      Sulfuras.new.update(item)
     when "Backstage passes to a TAFKAL80ETC concert"
-      if item.sell_in <= 0
-        item.quality = 0
-        item.sell_in -= 1
-        return
-      end
-
-      if item.sell_in <= 5
-        item.quality += 1 if item.quality < 50
-        item.quality += 1 if item.quality < 50
-        item.quality += 1 if item.quality < 50
-      elsif item.sell_in <= 10
-        item.quality += 1 if item.quality < 50
-        item.quality += 1 if item.quality < 50
-      else
-        item.quality += 1 if item.quality < 50
-      end
-
-      item.sell_in -= 1
+      Backstage.new.update(item)
     end
   end
 end
