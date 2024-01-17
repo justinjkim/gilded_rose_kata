@@ -15,7 +15,7 @@ class AgedBrie
   end
 end
 
-class Sulfuras
+class Unchanged
   def update(item)
   end
 end
@@ -51,12 +51,11 @@ GILDED_ROSE_ITEMS =
   {
     "NORMAL ITEM" => NormalItem.new,
     "Aged Brie" => AgedBrie.new,
-    "Sulfuras, Hand of Ragnaros" => Sulfuras.new,
     "Backstage passes to a TAFKAL80ETC concert" => Backstage.new
   }
 
 def klass_for(item_name)
-  GILDED_ROSE_ITEMS[item_name]
+  GILDED_ROSE_ITEMS[item_name] || Unchanged.new
 end
 
 # DO NOT CHANGE THINGS BELOW -----------------------------------------
